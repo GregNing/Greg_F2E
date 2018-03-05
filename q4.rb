@@ -10,40 +10,41 @@ def bOverlapped(a,b)
     return !(a[1] < b[0] || a[0] > b[1])
 end
 
-def insert2(intervals, newInterval)
+def insert(intervals, newInterval)
     l = Array.new
     inser = true; #judge where to insert the newInterval;
     i = 0
-    for value in i..intervals.size do     
+    for value in i..intervals.length - 1
            
-        if  (intervals[i][0] <= newInterval[0] && intervals[i][1] >= newInterval[0])||
-            (newInterval[0] <= intervals[i][0] && newInterval[1] >= intervals[i][0]) 
+        if  (intervals[value][0] <= newInterval[0] && intervals[value][1] >= newInterval[0])||
+            (newInterval[0] <= intervals[value][0] && newInterval[1] >= intervals[value][0]) 
 
-            newInterval[0] = min(intervals[i][0] , newInterval[0])
-            newInterval[1] = max(intervals[i][1] , newInterval[1])
-            intervals.delete(i)
-            i -= 1
+            newInterval[0] = min(intervals[value][0] , newInterval[0])
+            newInterval[1] = max(intervals[value][1] , newInterval[1])
+            
+            intervals.delete(value)            
+            value -= 1            
             next
         end
 
-        if newInterval[0] < intervals[i][0] && inser == true
+        if newInterval[0] < intervals[value][0] && inser == true
             l << newInterval
-            l << intervals[i]
-            inser = false;
+            l << intervals[value]
+            inser = false
         else
-            l << intervals[i]
+            l << intervals[value]
         end
-        i += 1
     end
     l << newInterval if inser == true
     return l
 end
 
+intervals = [[1,3],[6,9]]
+newInterval = [2,5]
+puts insert(intervals,newInterval)# => [1,5],[6,9]
 
-# intervals = [[1,3],[6,9]]
-# newInterval = [2,5]
-#puts insert2(intervals,newInterval) => [1,5],[6,9]
+puts "========================="
+
 intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]]
 newInterval = [4,9]
-
-puts insert2(intervals,newInterval)
+puts insert(intervals,newInterval) # => [1,2],[3,10],[12,16]
